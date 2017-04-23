@@ -5,4 +5,4 @@ class Graph_TSP:
 	def __init__(self, nodes, adjacency_matrix):
 		self.nodes = nodes
 		self.adjacency_matrix = adjacency_matrix
-
+	
