@@ -2,6 +2,7 @@ import random
 import operator
 import numpy as np
 import disjoint_sets as DS
+from scipy.spatial import ConvexHull
 class Graph_TSP:
 	#Nodes should be a dictionary of key value pairing : node num to xy coordinates
 	#Edges are implied in the adjacency matrix 
@@ -92,7 +93,6 @@ class Graph_TSP:
 					numEdges += 1
 					edgePath.append(vertices)
 		lastTwo = [allNodes.index(x) for x in degreeDict.keys() if degreeDict[x] == 1]
-		print degreeDict.values()
 		edgePath.append((lastTwo[0],lastTwo[1]))
  		return edgePath
  	def isCycle(self,ds1,ds2):
@@ -103,7 +103,7 @@ class Graph_TSP:
 	#### Convex Hull Insertion
 	########
 	def convexhullInsert(self):
-		
+		allPoints = np.array(self.nodeDict.values())
 		return 1
 	def HKLowerBoundCost(self):
 		return 1
@@ -113,4 +113,10 @@ class Graph_TSP:
 	def pathEdges(self,visitedNodes):
 		return list()
 	def cost(self,path):
-		return 1
+		counter = 0
+		for edge in path:
+			checkEdge = edge
+			if (checkEdge not in self.edgeDict):
+				checkEdge = (edge[1],edge[0])
+			counter += self.edgeDict[checkEdge]
+		return counter

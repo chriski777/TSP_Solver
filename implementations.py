@@ -27,6 +27,9 @@ x = att48_graph.nearestNeighbor()
 b = att48_graph.nodeDict
 y = att48_graph.greedy()
 
+print("Cost for nearestNeighbor: " + str(att48_graph.cost(x)))
+print("Cost for greedy: " + str(att48_graph.cost(y)))
+'''
 ######################
 ###Create Snapshots
 ######################
@@ -40,4 +43,4 @@ for i in range(0,49):
 
 for n, p in b.iteritems():
     G.node[n]['pos'] = p
-    
+'''
