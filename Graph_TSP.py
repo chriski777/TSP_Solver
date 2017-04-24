@@ -99,7 +99,11 @@ class Graph_TSP:
  		return ds1.find() == ds2.find()
 	def nodeLessTwo(self, d1, d2, degreeDict):
 		return (degreeDict[d1] < 2) and (degreeDict[d2] < 2)
+	########
+	#### Convex Hull Insertion
+	########
 	def convexhullInsert(self):
+		
 		return 1
 	def HKLowerBoundCost(self):
 		return 1
