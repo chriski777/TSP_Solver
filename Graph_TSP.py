@@ -8,9 +8,13 @@ class Graph_TSP:
 		self.nodeDict = nodeDict
 		self.adjMatrix = adjMatrix
 		self.counts = len(nodeDict)
+	def randomSolution(self):
+		unvisitedNodes = range(0,self.counts)
+		random.shuffle(unvisitedNodes)
+		return unvisitedNodes
 	def nearestNeighbor(self):
 		visitedNodes = []
-		unvisitedNodes = range(0,48)
+		unvisitedNodes = range(0,self.counts)
 		random.shuffle(unvisitedNodes)
 		node = unvisitedNodes.pop()
 		visitedNodes.append(node)
@@ -29,7 +33,12 @@ class Graph_TSP:
 		            minEdgeIndex = np.where(edges == minVal)[0][0]
 		            edges = np.delete(edges,minEdgeIndex)
 		return visitedNodes
+	#Consider same edge lengths
 	def greedy(self):
+		uniqueEdges = []
+		for i in range(self.counts):
+		    for j in range(i+1, self.counts):
+		        uniqueEdges.append(self.adjMatrix[i,j])		
 		return 1
 	def convexhullInsert(self):
 		return 1
@@ -37,7 +46,7 @@ class Graph_TSP:
 		return 1
 	def christoFides(self):
 		return 1
-	#path is a list 
+	#Make sure to connect the first and last vertex to get a hamiltonian cycle!
 	def pathEdges(self,visitedNodes):
 		return list()
 	def cost(self,path):
