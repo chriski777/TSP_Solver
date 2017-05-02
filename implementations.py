@@ -23,24 +23,27 @@ att48_DS = D.dataset_processing(dataDir,att48)
 ######################
 att48_graph = Graph.Graph_TSP(att48_DS.nodeDict,att48_DS.adjMatrix)
 
-x = att48_graph.nearestNeighbor()
-b = att48_graph.nodeDict
-y = att48_graph.greedy()
+nearestNeighbor = att48_graph.nearestNeighbor()
+nodeDict = att48_graph.nodeDict
+greedy = att48_graph.greedy()
+convHullTour, visualTour = att48_graph.convexhullInsert()
+print("Cost for nearestNeighbor: " + str(att48_graph.cost(nearestNeighbor)))
+print("Cost for greedy: " + str(att48_graph.cost(greedy)))
+print("Cost for Convex Hull Insertion : " + str(att48_graph.cost(convHullTour)))
 
-print("Cost for nearestNeighbor: " + str(att48_graph.cost(x)))
-print("Cost for greedy: " + str(att48_graph.cost(y)))
-'''
 ######################
 ###Create Snapshots
 ######################
-for i in range(0,49):
+
+#For ConvHull Algorithm
+for i in range(0,len(visualTour)):
     fig = plt.figure()
     G = nx.Graph()
-    G.add_nodes_from(b.keys())
-    nx.draw_networkx_nodes(G,b,node_size=10,nodelist = b.keys(),node_color='r')
-    nx.draw_networkx_edges(G,b, edgelist = y[0:i])
-    plt.savefig("%s.png" % i)
-
-for n, p in b.iteritems():
+    G.add_nodes_from(nodeDict.keys())
+    nx.draw_networkx_nodes(G,nodeDict,node_size=10,nodelist = nodeDict.keys(),node_color='r')
+    #For Visualization of 
+    nx.draw_networkx_edges(G,nodeDict, edgelist = visualTour[i])
+    plt.savefig("%s%s.png" % ("ConvHullTour",i))
+for n, p in nodeDict.iteritems():
     G.node[n]['pos'] = p
-'''
+plt.close('all')

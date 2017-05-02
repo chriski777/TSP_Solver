@@ -13,9 +13,9 @@ class Graph_TSP:
 		self.counts = len(nodeDict)
 		self.edgeDict = {}
 		for i in range(self.counts):
-		    for j in range(i+1, self.counts):
-		    	vertices = (i,j)
-		    	self.edgeDict[vertices] = self.adjMatrix[i,j]
+			for j in range(i+1, self.counts):
+				vertices = (i,j)
+				self.edgeDict[vertices] = self.adjMatrix[i,j]
 	def randomSolution(self):
 		unvisitedNodes = range(0,self.counts)
 		random.shuffle(unvisitedNodes)
@@ -40,19 +40,19 @@ class Graph_TSP:
 		node = unvisitedNodes.pop()
 		visitedNodes.append(node)
 		while unvisitedNodes:
-		    edges = np.copy(self.adjMatrix[node])
-		    chosen = []
-		    while not chosen:
-		        minVal = np.min(edges)
-		        minIndex = np.where(self.adjMatrix[node] == minVal)[0][0]
-		        if minIndex not in visitedNodes:
-		            chosen.append(minIndex)
-		            node = minIndex
-		            unvisitedNodes.remove(minIndex)
-		            visitedNodes.append(minIndex)
-		        else:
-		            minEdgeIndex = np.where(edges == minVal)[0][0]
-		            edges = np.delete(edges,minEdgeIndex)
+			edges = np.copy(self.adjMatrix[node])
+			chosen = []
+			while not chosen:
+				minVal = np.min(edges)
+				minIndex = np.where(self.adjMatrix[node] == minVal)[0][0]
+				if minIndex not in visitedNodes:
+					chosen.append(minIndex)
+					node = minIndex
+					unvisitedNodes.remove(minIndex)
+					visitedNodes.append(minIndex)
+				else:
+					minEdgeIndex = np.where(edges == minVal)[0][0]
+					edges = np.delete(edges,minEdgeIndex)
 		edgePath = []
 		for i in range(0,self.counts):
 			if i < self.counts - 1:
@@ -94,17 +94,64 @@ class Graph_TSP:
 					edgePath.append(vertices)
 		lastTwo = [allNodes.index(x) for x in degreeDict.keys() if degreeDict[x] == 1]
 		edgePath.append((lastTwo[0],lastTwo[1]))
- 		return edgePath
- 	def isCycle(self,ds1,ds2):
- 		return ds1.find() == ds2.find()
+		return edgePath
+	def isCycle(self,ds1,ds2):
+		return ds1.find() == ds2.find()
 	def nodeLessTwo(self, d1, d2, degreeDict):
 		return (degreeDict[d1] < 2) and (degreeDict[d2] < 2)
 	########
 	#### Convex Hull Insertion
 	########
 	def convexhullInsert(self):
+		#Initial Subtour composed of Convex Hull
 		allPoints = np.array(self.nodeDict.values())
-		return 1
+		convHull = ConvexHull(allPoints)
+		listofHullEdges = convHull.simplices.tolist()
+		listofHullIndices = convHull.vertices.tolist()
+		allTours = [listofHullEdges]
+		unvisitedNodes = [z for z in self.nodeDict.keys() if z not in listofHullIndices]
+		visitedNodes = listofHullIndices[:]
+		listOfCurrentEdges = listofHullEdges[:]
+		while unvisitedNodes:
+			triplets = []
+			listOfCurrentEdges = listOfCurrentEdges[:]
+			#Go through each node not in the current Cycle
+			for node in unvisitedNodes:
+				neighborVals = self.adjMatrix[node]
+				minVal = 1000000000000
+				triplet = (-10,-10,-10)
+				#Find the minimal triplet for each node that adheres to the minimal w_ir + w_jr - w_ij
+				for edge in listOfCurrentEdges:
+					nodeI = edge[0]
+					nodeJ = edge[1]
+					cost = neighborVals[nodeI] + neighborVals[nodeJ] - self.adjMatrix[nodeI][nodeJ]
+					if cost < minVal:
+						minVal = cost
+						triplet = (nodeI,nodeJ,node)
+				triplets.append(triplet)
+			#From all these triplets, find the most optimal one based on the ratio!
+			minRatio = 1000000000000
+			chosenTrip = (-10,-10,-10)
+			for triple in triplets:
+				ratio = (self.adjMatrix[triple[0]][triple[2]] + self.adjMatrix[triple[1]][triple[2]])/ self.adjMatrix[triple[0]][triple[1]]
+				if minRatio > ratio:
+					minRatio = ratio
+					chosenTrip = triple
+			#Insert node_r between node_i and node_j
+			node_i = chosenTrip[0]
+			node_j = chosenTrip[1]
+			node_r = chosenTrip[2]
+			currEdge = [x for x in listOfCurrentEdges if all([node_i in x,node_j in x])][0]
+			listOfCurrentEdges.append([node_i,node_r])
+			listOfCurrentEdges.append([node_j,node_r])
+			listOfCurrentEdges.remove(currEdge)
+			unvisitedNodes.remove(node_r)
+			visitedNodes.append(node_r)
+			#Alltours is for visualization Purposes
+			allTours.append(listOfCurrentEdges)
+		#The path that follows the convex Hull Insertion Algorithm, return ONLY if path needed
+		#return listOfCurrentEdges
+		return self.listConverter(listOfCurrentEdges), allTours
 	def HKLowerBoundCost(self):
 		return 1
 	def christoFides(self):
@@ -120,3 +167,8 @@ class Graph_TSP:
 				checkEdge = (edge[1],edge[0])
 			counter += self.edgeDict[checkEdge]
 		return counter
+	def listConverter(self, edgeList):
+		tupleSol = []
+		for listElem in edgeList:
+			tupleSol.append((listElem[0],listElem[1]))
+		return tupleSol
