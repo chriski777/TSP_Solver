@@ -1,13 +1,9 @@
-import plotly 
-import plotly.plotly as py
-from plotly.graph_objs import *
 import networkx as nx
 import Graph_TSP as Graph
 import dataset_processing as D
 import numpy as np
 import matplotlib.pyplot as plt
-plotly.tools.set_credentials_file(username='chriski777', api_key='PE1PC0QMswvn4XZSZMHg')
-
+import os
 #Data directory names
 dataDir = "datasetTSP"
 att48 = "att48"
@@ -36,14 +32,17 @@ print("Cost for Convex Hull Insertion : " + str(att48_graph.cost(convHullTour)))
 ######################
 
 #For ConvHull Algorithm
+newFolder = "ConvHullPics"
+if not os.path.exists(newFolder):
+    os.makedirs(newFolder)
 for i in range(0,len(visualTour)):
     fig = plt.figure()
     G = nx.Graph()
     G.add_nodes_from(nodeDict.keys())
     nx.draw_networkx_nodes(G,nodeDict,node_size=10,nodelist = nodeDict.keys(),node_color='r')
-    #For Visualization of 
+    #For Visualization of Convex Hull Paths formed by algorithm
     nx.draw_networkx_edges(G,nodeDict, edgelist = visualTour[i])
-    plt.savefig("%s%s.png" % ("ConvHullTour",i))
+    plt.savefig("%s/%s/%s%s.png" % (att48,newFolder,"ConvHullTour",i))
 for n, p in nodeDict.iteritems():
     G.node[n]['pos'] = p
 plt.close('all')

@@ -149,12 +149,12 @@ class Graph_TSP:
 			visitedNodes.append(node_r)
 			#Alltours is for visualization Purposes
 			allTours.append(listOfCurrentEdges)
-		#The path that follows the convex Hull Insertion Algorithm, return ONLY if path needed
-		#return listOfCurrentEdges
 		return self.listConverter(listOfCurrentEdges), allTours
 	def HKLowerBoundCost(self):
 		return 1
 	def christoFides(self):
+		#Create a minimum spanning Tree of Graph G
+		
 		return 1
 	#Make sure to connect the first and last vertex to get a hamiltonian cycle!
 	def pathEdges(self,visitedNodes):
