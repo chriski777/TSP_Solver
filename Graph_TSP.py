@@ -5,6 +5,7 @@ import disjoint_sets as DS
 from scipy.spatial import ConvexHull
 from scipy.sparse.csgraph import minimum_spanning_tree
 import networkx.algorithms as naa
+import networkx as nx
 
 class Graph_TSP:
 	#Nodes should be a dictionary of key value pairing : node num to xy coordinates
@@ -38,6 +39,7 @@ class Graph_TSP:
 	########
 	def nearestNeighbor(self):
 		visitedNodes = []
+		edgePath = []
 		unvisitedNodes = range(0,self.counts)
 		random.shuffle(unvisitedNodes)
 		node = unvisitedNodes.pop()
@@ -46,8 +48,16 @@ class Graph_TSP:
 			edges = np.copy(self.adjMatrix[node])
 			chosen = []
 			while not chosen:
-				minVal = np.min(edges)
-				minIndex = np.where(self.adjMatrix[node] == minVal)[0][0]
+				if len(edges) != 0:
+					minVal = np.min(edges)
+					minIndex = np.where(self.adjMatrix[node] == minVal)[0][0]
+				if len(edges) == 0:
+					edges = np.array([self.adjMatrix[node][x] for x in unvisitedNodes])
+					minVal = np.min(edges)
+					minIndex = -1
+					for x in unvisitedNodes:
+						if minVal == self.adjMatrix[node][x]:
+							minIndex = x
 				if minIndex not in visitedNodes:
 					chosen.append(minIndex)
 					node = minIndex
@@ -56,7 +66,6 @@ class Graph_TSP:
 				else:
 					minEdgeIndex = np.where(edges == minVal)[0][0]
 					edges = np.delete(edges,minEdgeIndex)
-		edgePath = []
 		for i in range(0,self.counts):
 			if i < self.counts - 1:
 				edgePath.append((visitedNodes[i],visitedNodes[i+1]))
@@ -169,7 +178,6 @@ class Graph_TSP:
 		            degreeDict[index] +=1
 		            tuplex = (i,index)
 		            MSTedges.append(tuplex)
-
 		#STEP 2: Isolate the vertices of the MST with odd degree
 		OddVerts = [x for x in degreeDict.keys() if degreeDict[x] %2 != 0]
 		#STEP 3: Only Consider the values in OddVerts and form a min-weight perfect matching
@@ -193,7 +201,7 @@ class Graph_TSP:
 		    degreeDict[tup[0]] +=1
 		    degreeDict[tup[1]] +=1
 		#Retrieve the Eulerian Circuit
-		eulerianCircuit = eulerianTour(unionMW_MST,nodeDict)
+		eulerianCircuit = self.eulerianTour(unionMW_MST,self.nodeDict)
 		shortCut = []
 		unvisitedPath = []
 		totalPath = [i for sub in eulerianCircuit for i in sub]
@@ -205,13 +213,13 @@ class Graph_TSP:
 	#Make sure to connect the first and last vertex to get a hamiltonian cycle!
 	def pathEdges(self,visitedNodes):
 		solution = []
-		for i in range(0,len(shortCut)):
-		    if i < len(shortCut) - 1:
-		        solution.append((shortCut[i],shortCut[i+1]))
+		for i in range(0,len(visitedNodes)):
+		    if i < len(visitedNodes) - 1:
+		        solution.append((visitedNodes[i],visitedNodes[i+1]))
 		    else:
-		        solution.append((shortCut[i],shortCut[0]))
+		        solution.append((visitedNodes[i],visitedNodes[0]))
 		return solution
-	def eulerianTour(setOfEdges,vertDict):
+	def eulerianTour(self,setOfEdges,vertDict):
 	    tempGraph = nx.MultiGraph()
 	    tempGraph.add_nodes_from(vertDict.keys())
 	    tempGraph.add_edges_from(setOfEdges)
