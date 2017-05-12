@@ -3,6 +3,9 @@ import operator
 import numpy as np
 import disjoint_sets as DS
 from scipy.spatial import ConvexHull
+from scipy.sparse.csgraph import minimum_spanning_tree
+import networkx.algorithms as naa
+
 class Graph_TSP:
 	#Nodes should be a dictionary of key value pairing : node num to xy coordinates
 	#Edges are implied in the adjacency matrix 
@@ -154,11 +157,65 @@ class Graph_TSP:
 		return 1
 	def christoFides(self):
 		#Create a minimum spanning Tree of Graph G
-		
-		return 1
+		Tcsr = minimum_spanning_tree(self.adjMatrix)
+		MSTedges = []
+		degreeDict = dict(zip(self.nodeDict.keys(),[0]*len(self.nodeDict.keys())))
+		Z = Tcsr.toarray().astype(float)
+		for i in range(len(Z)):
+		    array = np.nonzero(Z[i])[0]
+		    for index in array:
+		        if index.size != 0:
+		            degreeDict[i] += 1
+		            degreeDict[index] +=1
+		            tuplex = (i,index)
+		            MSTedges.append(tuplex)
+
+		#STEP 2: Isolate the vertices of the MST with odd degree
+		OddVerts = [x for x in degreeDict.keys() if degreeDict[x] %2 != 0]
+		#STEP 3: Only Consider the values in OddVerts and form a min-weight perfect matching
+		H = nx.Graph()
+		H.add_nodes_from(self.nodeDict.keys())
+		for i in range(len(OddVerts)):
+		    for j in range(len(OddVerts)):
+		        if i != j:
+		            H.add_edge(OddVerts[i],OddVerts[j],weight = -self.adjMatrix[OddVerts[i]][OddVerts[j]])
+		edgeMWDict = naa.max_weight_matching(H, maxcardinality = True)
+		minWeight = [(key,edgeMWDict[key]) for key in edgeMWDict.keys()]
+		uniqueMW = []
+		#Prune out redundant Tuples
+		for edge in minWeight:
+		    if edge not in uniqueMW and (edge[1],edge[0]) not in uniqueMW:
+		        uniqueMW.append(edge)
+		unionMW_MST = MSTedges[:]
+		for tup in uniqueMW:
+		    #Only add first index since both edges are returned for instance: (0,1) & (1,0) are returned
+		    unionMW_MST.append(tup)
+		    degreeDict[tup[0]] +=1
+		    degreeDict[tup[1]] +=1
+		#Retrieve the Eulerian Circuit
+		eulerianCircuit = eulerianTour(unionMW_MST,nodeDict)
+		shortCut = []
+		unvisitedPath = []
+		totalPath = [i for sub in eulerianCircuit for i in sub]
+		for node in totalPath:
+		    if node not in unvisitedPath:
+		        shortCut.append(node)
+		        unvisitedPath.append(node)
+		return self.pathEdges(shortCut)
 	#Make sure to connect the first and last vertex to get a hamiltonian cycle!
 	def pathEdges(self,visitedNodes):
-		return list()
+		solution = []
+		for i in range(0,len(shortCut)):
+		    if i < len(shortCut) - 1:
+		        solution.append((shortCut[i],shortCut[i+1]))
+		    else:
+		        solution.append((shortCut[i],shortCut[0]))
+		return solution
+	def eulerianTour(setOfEdges,vertDict):
+	    tempGraph = nx.MultiGraph()
+	    tempGraph.add_nodes_from(vertDict.keys())
+	    tempGraph.add_edges_from(setOfEdges)
+	    return list(nx.eulerian_circuit(tempGraph))
 	def cost(self,path):
 		counter = 0
 		for edge in path:
