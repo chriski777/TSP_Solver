@@ -4,49 +4,45 @@ import dataset_processing as D
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import adjMatrix as adj
+import graph_visualizer as graphVis
 #Data directory names
 dataDir = "datasetTSP"
-att48 = "att48"
 
-######################
-###Data Processing
-######################
-#Feed in a directory which has your xy coordinates and your adjacency matrices
-att48_DS = D.dataset_processing(dataDir,att48)
-
+while (True):
+	try:
+		instanceName = raw_input("\nEnter the TSP directory you would like to approximate: ")
+		adjMat_response = raw_input("Do you have an adjacency matrix .txt file for your instance?(Y/N):")
+		if adjMat_response.lower() in ['n','no'] :
+			print ("Calculating your adjacency matrix...")
+			adj.createAdjMatrixFile(instanceName)
+			print ("Done! Your adjMatrix has been created.")
+		#Feed in a directory which has your xy coordinates and your adjacency matrices
+		instance_DS = D.dataset_processing(dataDir,instanceName)
+		vis_response = raw_input("Would you like visualizations for the algorithms? (Y/N): ")		
+		break
+	except (IOError, NameError):
+		print("This is not a valid instance. Please put in a valid directory name!")
+	except (IndexError):
+		print("Please make sure your %s_s.txt's first and last value are the same.")
 ######################
 ###Initialization
 ######################
-att48_graph = Graph.Graph_TSP(att48_DS.nodeDict,att48_DS.adjMatrix)
+instance_graph = Graph.Graph_TSP(instance_DS.nodeDict,instance_DS.adjMatrix, instanceName)
 
-optimal = att48_DS.solution
-nearestNeighbor = att48_graph.nearestNeighbor()
-nodeDict = att48_graph.nodeDict
-greedy = att48_graph.greedy()
-convHullTour, visualTour = att48_graph.convexhullInsert()
-christoFides = att48_graph.christoFides()
-print("Cost for nearestNeighbor: " + str(att48_graph.cost(nearestNeighbor)))
-print("Cost for greedy: " + str(att48_graph.cost(greedy)))
-print("Cost for Convex Hull Insertion : " + str(att48_graph.cost(convHullTour)))
-print("Cost for Christofides : " + str(att48_graph.cost(christoFides)))
-print("Optimal Cost : " + str(att48_graph.cost(optimal)))
+optimal = instance_DS.solution
+nearestNeighbor = instance_graph.nearestNeighbor()
+nodeDict = instance_graph.nodeDict
+greedy = instance_graph.greedy()
+convHullTour, visualTour = instance_graph.convexhullInsert()
+christoFides = instance_graph.christoFides()
+print("Cost for nearestNeighbor: " + str(instance_graph.cost(nearestNeighbor)))
+print("Cost for greedy: " + str(instance_graph.cost(greedy)))
+print("Cost for Convex Hull Insertion : " + str(instance_graph.cost(convHullTour)))
+print("Cost for Christofides : " + str(instance_graph.cost(christoFides)))
+print("Optimal Cost : " + str(instance_graph.cost(optimal)))
 
-######################
-###Create Snapshots
-######################
-'''
-newFolder = "ConvHullPics"
-if not os.path.exists(newFolder):
-    os.makedirs(newFolder)
-for i in range(0,len(visualTour)):
-    fig = plt.figure()
-    G = nx.Graph()
-    G.add_nodes_from(nodeDict.keys())
-    nx.draw_networkx_nodes(G,nodeDict,node_size=10,nodelist = nodeDict.keys(),node_color='r')
-    #For Visualization of Convex Hull Paths formed by algorithm
-    nx.draw_networkx_edges(G,nodeDict, edgelist = visualTour[i])
-    plt.savefig("%s/%s/%s%s.png" % (att48,newFolder,"ConvHullTour",i))
-for n, p in nodeDict.iteritems():
-    G.node[n]['pos'] = p
-plt.close('all')
-'''
+if (vis_response.lower() in ['y','yes']):
+	print("\nCreating your graph visualizations...")
+	graph_visuals = graphVis.graph_visualizer()
+	graph_visuals.snapshotMaker(instance_graph)

@@ -11,11 +11,12 @@ class Graph_TSP:
 	#Nodes should be a dictionary of key value pairing : node num to xy coordinates
 	#Edges are implied in the adjacency matrix 
 	#Adjacency matrix will be n x n; where n is the number of nodes
-	def __init__(self, nodeDict, adjMatrix):
+	def __init__(self, nodeDict, adjMatrix,instanceName):
 		self.nodeDict = nodeDict
 		self.adjMatrix = adjMatrix
 		self.counts = len(nodeDict)
 		self.edgeDict = {}
+		self.instanceName = instanceName
 		for i in range(self.counts):
 			for j in range(i+1, self.counts):
 				vertices = (i,j)

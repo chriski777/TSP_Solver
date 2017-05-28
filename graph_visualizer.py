@@ -43,6 +43,7 @@ class graph_visualizer:
 		    nx.draw_networkx_edges(G,dataGraph.nodeDict, edgelist = algEdges[i])
 		    dtry = "%s/%s%s.png" % (directory,alg,i)
 		    plt.savefig(dtry)
+		    plt.clf()
 		for n, p in dataGraph.nodeDict.iteritems():
 		    G.node[n]['pos'] = p
 		plt.close('all')
@@ -61,6 +62,7 @@ class graph_visualizer:
 		    nx.draw_networkx_edges(G,dataGraph.nodeDict, edgelist = edgelist)
 		    dtry = "%s/%s%s.png" % (directory,alg,i)
 		    plt.savefig(dtry)
+		    plt.clf()
 		for n, p in dataGraph.nodeDict.iteritems():
 		    G.node[n]['pos'] = p
 		plt.close('all')
@@ -84,6 +86,7 @@ class graph_visualizer:
 			    nx.draw_networkx_edges(G,dataGraph.nodeDict, edgelist = edgelist)
 			    dtry = "%s/%s/%s%s.png" % (directory,portion[t],portion[t],i)
 			    plt.savefig(dtry)
+			    plt.clf()
 			for n, p in dataGraph.nodeDict.iteritems():
 			    G.node[n]['pos'] = p
 			plt.close('all')

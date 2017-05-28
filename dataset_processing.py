@@ -1,4 +1,7 @@
 import numpy as np
+######################
+###Data Processing
+######################
 class dataset_processing:
 	def __init__(self, folder, dsName):
 		self.dataDir = "%s/%s" % (folder, dsName)
