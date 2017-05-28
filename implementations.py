@@ -28,14 +28,14 @@ while (True):
 ######################
 ###Initialization
 ######################
-instance_graph = Graph.Graph_TSP(instance_DS.nodeDict,instance_DS.adjMatrix, instanceName)
+instance_graph = Graph.Graph_TSP(instance_DS.nodeDict,instance_DS.adjMatrix, instanceName, instance_DS.solution)
 
 optimal = instance_DS.solution
 nearestNeighbor = instance_graph.nearestNeighbor()
 nodeDict = instance_graph.nodeDict
 greedy = instance_graph.greedy()
 convHullTour, visualTour = instance_graph.convexhullInsert()
-christoFides = instance_graph.christoFides()
+christoFides = instance_graph.christoFides()[3]
 print("Cost for nearestNeighbor: " + str(instance_graph.cost(nearestNeighbor)))
 print("Cost for greedy: " + str(instance_graph.cost(greedy)))
 print("Cost for Convex Hull Insertion : " + str(instance_graph.cost(convHullTour)))

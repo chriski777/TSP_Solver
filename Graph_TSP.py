@@ -11,12 +11,13 @@ class Graph_TSP:
 	#Nodes should be a dictionary of key value pairing : node num to xy coordinates
 	#Edges are implied in the adjacency matrix 
 	#Adjacency matrix will be n x n; where n is the number of nodes
-	def __init__(self, nodeDict, adjMatrix,instanceName):
+	def __init__(self, nodeDict, adjMatrix,instanceName, solution):
 		self.nodeDict = nodeDict
 		self.adjMatrix = adjMatrix
 		self.counts = len(nodeDict)
 		self.edgeDict = {}
 		self.instanceName = instanceName
+		self.solution = solution
 		for i in range(self.counts):
 			for j in range(i+1, self.counts):
 				vertices = (i,j)
@@ -210,7 +211,7 @@ class Graph_TSP:
 		    if node not in unvisitedPath:
 		        shortCut.append(node)
 		        unvisitedPath.append(node)
-		return self.pathEdges(shortCut)
+		return [MSTedges,minWeight, eulerianCircuit,self.pathEdges(shortCut)]
 	#Make sure to connect the first and last vertex to get a hamiltonian cycle!
 	def pathEdges(self,visitedNodes):
 		solution = []

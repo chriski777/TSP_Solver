@@ -28,7 +28,7 @@ class graph_visualizer:
 				convHullTour,visualTour = dataGraph.convexhullInsert()
 				self.snapshotConvHelper(dataGraph,visualTour, newFolder,alg)
 			if alg == "Christofides":
-				christoFides = [dataGraph.christoFides()][0]
+				christoFides = dataGraph.christoFides()
 				self.snapshotChrisHelper(dataGraph,christoFides, newFolder,alg)
 			if alg == "Optimal":
 				self.snapshotHelper(dataGraph,dataGraph.solution, newFolder,alg)
