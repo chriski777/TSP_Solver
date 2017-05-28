@@ -1,4 +1,42 @@
-# graph_algorithms
-Visualizations of algorithms that provide solutions to TSP
+## graph_algorithms
+This program allows for visualization and approximation of four TSP approximation algorithms (Greedy, Nearest-neighbor, Christofides, and conv-hull insertion heuristic). It provides the cost of each algorithm on a user-provided TSP dataset. Keep in mind the algorithms **only** work for a symmetric complete graph. You can then compare these approximations to the optimal solution (which is usually provided on http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html along with TSP datasets.) Feel free to let me know of any bugs!
 
-Visualization [link](https://chriski777.github.io/graph_website/).
+## Using the Code
+
+
+Dataset Setup
+------------
+To use this program, please place the appropriate datafiles in the datasetTSP directory. 3 sample directories have been included in this repo. In the datasetTSP directory, make a folder with the name **datasetName**. Make sure to follow the nomenclature and include **datasetName**_xy.txt (x and y coordinates), **datasetName**_s.txt(solution), and **datasetName**_d.txt(adjacency matrix, this one is **optional**) in that directory. For the _s.txt, make sure to append the _s.txt file with the first node number if you are selecting a TSPdata instance from the link above. Keep in mind it is not required for you to have an adjacency matrix file. You must, however, have a _s.txt and _xy.txt file in the directory for this program to work.
+
+
+Usage
+-----
+On your terminal, navigate to the graph_algorithms directory. 
+Proceed to run:
+```
+python implementations.py
+```
+You will then see:
+```
+Enter the TSP directory you would like to approximate:
+```
+Type in your **datasetName**. This will be the same as the name of your newly created directory in the datasetTSP directory.
+You will then see:
+```
+Do you have an adjacency matrix .txt file for your instance?(Y/N):
+```
+If you have not included a _d.txt file in your directory, type in 'Y'. If not, type in 'N'.
+
+You will then be prompted to whether or not you would like visualizations.
+```
+Would you like visualizations for the algorithms? (Y/N): 
+```
+The costs will then show up for the four algorithms along with the optimal cost (calculated from _s.txt).
+
+The visualizations, if you typed in 'Y', will be saved in a directory with the name **datasetName** in the graph_algorithms directory. Check in 
+```
+\graph_algorithms\datasetName
+```
+and you should see distinct images in multiple folders. These images have not been stitched yet to form a movie. You can use imageJ to convert these images into a video. Enjoy! 
+
+Example visualization [link](https://chriski777.github.io/graph_website/).
