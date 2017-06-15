@@ -1,4 +1,6 @@
 ## Graph_algorithms
+Link to Report on TSP Approximation: [link](https://www.overleaf.com/read/kxcbxmmbpnkx).
+
 This program allows for visualization and approximation of four TSP approximation algorithms (Greedy, Nearest-neighbor, Christofides, and conv-hull insertion heuristic). It provides the cost of each algorithm on a user-provided TSP dataset. Keep in mind the algorithms **only** work for a symmetric complete graph. You can then compare these approximations to the optimal solution (which is usually provided on http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html along with TSP datasets.) Feel free to let me know of any bugs!
 
 Dataset Setup
