@@ -22,6 +22,7 @@ class Graph_TSP:
 			for j in range(i+1, self.counts):
 				vertices = (i,j)
 				self.edgeDict[vertices] = self.adjMatrix[i,j]
+	#Random solution formed by shuffling nodes 
 	def randomSolution(self):
 		unvisitedNodes = range(0,self.counts)
 		random.shuffle(unvisitedNodes)
@@ -115,6 +116,12 @@ class Graph_TSP:
 		return (degreeDict[d1] < 2) and (degreeDict[d2] < 2)
 	########
 	#### Convex Hull Insertion
+	####	1. Form a convex hull of our current graph. This forms our initial cycle.
+	####	2. For each node not in our current convex hull, find an edge e_ij = {n_i, n_j} in our current convex hull such that w_i,r + w_r,j - w_i,j
+	####	is minimal and keep track of this minimal triplet. 
+	####	3. For all triplets, find the minimal triplet (n_i', n_j',n_r') such that (w_i,r' + w_r,j')/ w_i,j' is minimal.
+	####	4. Insert n_r' between n_i' and n_j' by adding the edges e_r,i & e_r,j while removing edge e_i,j
+	####	5. Repeat step 2-4 until all nodes have been added to our cycle. 
 	########
 	def convexhullInsert(self):
 		#Initial Subtour composed of Convex Hull
@@ -166,6 +173,13 @@ class Graph_TSP:
 		return self.listConverter(listOfCurrentEdges), allTours
 	def HKLowerBoundCost(self):
 		return 1
+	########
+	#### Christofides Algorithm
+	####	1. Form minimum spanning tree T of G. 
+	####	2. Generate an Minimum perfect matching of the vertices in the MST that have odd degrees.
+	####	3. Form an Eulerian path on the multigraph formed by the union (keep duplicates) of the MST and minimum weight perfect matching.
+	####	4. Perform shortcutting and skip repeated vertices in the Eulerian path to get a Hamiltonian circuit.
+	########
 	def christoFides(self):
 		#Create a minimum spanning Tree of Graph G
 		Tcsr = minimum_spanning_tree(self.adjMatrix)
