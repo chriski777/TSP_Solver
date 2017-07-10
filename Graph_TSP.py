@@ -22,11 +22,44 @@ class Graph_TSP:
 			for j in range(i+1, self.counts):
 				vertices = (i,j)
 				self.edgeDict[vertices] = self.adjMatrix[i,j]
+	########
+	####  Held-Karp Lower Bound 
+	####  	An iterative estimation provided by the book "The Traveling Salesman" (Reinhalt)
+	####		1. 
+	def HKLowerBoundCost(self):
+		#Start with first node
+		currNode = 0
+		#initialize city weights as zeros
+		subgraph_HK = 0
+		pi_vector = np.zeros(self.counts)
+		#initialize 20 nearest neighbors to currNode
+		nodeNums = range(0,self.counts )
+		edgeLengths = self.adjMatrix[currNode]
+		twentyNN = sorted(zip(edgeLengths, nodeNums))[1:21]
+		return 1
+	########
+	####  1-tree Bound 
+	####  	A form of lower bound that utilizes the 1-tree
+	####		1. Pick a random node v0.
+ 	####		2. Get the length of the MST after disregarding the random node. 
+ 	####		3. Let S be the sum of the cheapest two edges incident with the random node v0. 
+ 	####		4. Output the sum of 2 and 3.
+ 	########
+	def oneTreeBound(self):
+		
+		return 1
 	#Random solution formed by shuffling nodes 
+	#Meant to provide bad solutions
 	def randomSolution(self):
 		unvisitedNodes = range(0,self.counts)
 		random.shuffle(unvisitedNodes)
-		return unvisitedNodes
+		edgePath = []
+		for i in range(0,len(unvisitedNodes)):
+			if i < self.counts - 1:
+				edgePath.append((unvisitedNodes[i],unvisitedNodes[i+1]))
+			else:
+				edgePath.append((unvisitedNodes[i],unvisitedNodes[0]))
+		return self.listConverter(edgePath)
 	########
 	#### NearestNeighbor
 	#### 	Initialize visitedNodes to ensure no cycle is created 
@@ -171,8 +204,6 @@ class Graph_TSP:
 			#Alltours is for visualization Purposes
 			allTours.append(listOfCurrentEdges)
 		return self.listConverter(listOfCurrentEdges), allTours
-	def HKLowerBoundCost(self):
-		return 1
 	########
 	#### Christofides Algorithm
 	####	1. Form minimum spanning tree T of G. 
