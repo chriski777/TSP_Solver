@@ -57,5 +57,5 @@ if solExist:
 
 if (vis_response.lower() in ['y','yes']):
 	print("\nCreating your graph visualizations...")
-	graph_visuals = graphVis.graph_visualizer()
+	graph_visuals = graphVis.graph_visualizer(solExist)
 	graph_visuals.snapshotMaker(instance_graph)

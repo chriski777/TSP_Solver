@@ -6,7 +6,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 class graph_visualizer:
-	def __init__(self):
+	def __init__(self,solExist):
+		self.solExist = solExist
 		return
 	######################
 	###Create Snapshots
@@ -30,8 +31,9 @@ class graph_visualizer:
 			if alg == "Christofides":
 				christoFides = dataGraph.christoFides()
 				self.snapshotChrisHelper(dataGraph,christoFides, newFolder,alg)
-			if alg == "Optimal":
-				self.snapshotHelper(dataGraph,dataGraph.solution, newFolder,alg)
+			if self.solExist:
+				if alg == "Optimal":
+					self.snapshotHelper(dataGraph,dataGraph.solution, newFolder,alg)
 
 	def snapshotConvHelper(self,dataGraph,algEdges, directory,alg):
 		for i in range(0,len(algEdges)):
