@@ -34,6 +34,7 @@ class Bounds:
  	####		2. Get the length of the MST after disregarding the random node. 
  	####		3. Let S be the sum of the cheapest two edges incident with the random node v0. 
  	####		4. Output the sum of 2 and 3.
+ 	####	The 1-Tree bound should approximately be 90.5% of the 
  	########
 	def calculateOTB(self):
 		initNode = random.randint(0,self.counts-1)
@@ -63,6 +64,7 @@ class Bounds:
 			if (checkEdge not in self.edgeDict):
 				checkEdge = (edge[1],edge[0])
 			r += self.edgeDict[checkEdge]
+		# s is the sum of the cheapest two edges incident with the random node v0.
 		s = 0
 		edgeLengths = self.adjMatrix[initNode]
 		nodeNums = range(0,self.counts)

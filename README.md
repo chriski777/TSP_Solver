@@ -5,7 +5,7 @@ This program allows for visualization and approximation of four TSP approximatio
 
 Dataset Setup
 ------------
-To use this program, please place the appropriate datafiles in the datasetTSP directory. 3 sample directories have been included in this repo. In the datasetTSP directory, make a folder with the name **datasetName**. Make sure to follow the nomenclature and include **datasetName**_xy.txt (x and y coordinates), **datasetName**_s.txt(solution), and **datasetName**_d.txt(adjacency matrix, this one is **optional**) in that directory. For the _s.txt, make sure to append the _s.txt file with the first node number if you are selecting a TSPdata instance from the link above. Keep in mind it is not required for you to have an adjacency matrix file. You must, however, have a _s.txt and _xy.txt file in the directory for this program to work.
+To use this program, please place the appropriate datafiles in the datasetTSP directory. 3 sample directories have been included in this repo. In the datasetTSP directory, make a folder with the name **datasetName**. Make sure to follow the nomenclature and include **datasetName**_xy.txt (x and y coordinates), **datasetName**_s.txt(solution), and **datasetName**_d.txt(adjacency matrix, this one is **optional**) in that directory. For the _s.txt, make sure to append the _s.txt file with the first node number if you are selecting a TSPdata instance from the link above. Keep in mind it is not required for you to have an adjacency matrix file or a solution file. You must, however, have a _xy.txt file in the directory for this program to work.
 
 For the **datasetName**xy.txt file, each row of the .txt file corresponds to a single node's x- & y-coordinates. To use the data from the TSPLIB, get the xy coordinates from the **datasetName**.tsp link (att48.tsp if you want the xy coordinates). You can also find the optimal tour under the tour_section in the **datasetName**.opt.tour link in the TSPLIB link above. 
 
@@ -25,7 +25,14 @@ You will then see:
 ```
 Do you have an adjacency matrix .txt file for your instance?(Y/N):
 ```
-If you have not included a _d.txt file in your directory, type in 'Y'. If not, type in 'N'.
+If you have not included a _d.txt file in your directory, type in 'N'. If you have, type in 'Y'.
+
+You will then see:
+
+```
+Do you have a solution .txt file for your instance?(Y/N): 
+```
+If you have not included a _s.txt file in your directory, type in 'N'. If you have, type in 'Y'. If you answer 'Y', the cost of your optimal tour in the _s.txt file will be calculated and displayed.
 
 You will then be prompted to whether or not you would like visualizations.
 ```

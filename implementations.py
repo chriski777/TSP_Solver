@@ -17,8 +17,13 @@ while (True):
 			print ("Calculating your adjacency matrix...")
 			adj.createAdjMatrixFile(instanceName)
 			print ("Done! Your adjMatrix has been created.")
+		sol_response = raw_input("Do you have a solution .txt file for your instance?(Y/N): ")
+		solExist = True
+		if sol_response.lower() in ['n', 'no'] :
+			print("That's alright! The 1-tree LB and HKLB can be used as reference points for comparisons across the 4 algorithms. ")
+			solExist = False
 		#Feed in a directory which has your xy coordinates and your adjacency matrices
-		instance_DS = D.dataset_processing(dataDir,instanceName)
+		instance_DS = D.dataset_processing(dataDir,instanceName, solExist)
 		vis_response = raw_input("Would you like visualizations for the algorithms? (Y/N): ")		
 		break
 	except (IOError, NameError):
@@ -31,7 +36,6 @@ while (True):
 instance_graph = Graph.Graph_TSP(instance_DS.nodeDict,instance_DS.adjMatrix, instanceName, instance_DS.solution)
 
 randomSol = instance_graph.randomSolution()
-optimal = instance_DS.solution
 nearestNeighbor = instance_graph.nearestNeighbor()
 nodeDict = instance_graph.nodeDict
 greedy = instance_graph.greedy()
@@ -47,7 +51,9 @@ print("Cost for Convex Hull Insertion : " + str(instance_graph.cost(convHullTour
 print("Cost for Christofides : " + str(instance_graph.cost(christoFides)))
 print("The one-tree Lower Bound is: " + str(oneTreeLB))
 print("The HK Lower Bound is: " + str(HKLB))
-print("Optimal Cost : " + str(instance_graph.cost(optimal)))
+if solExist:
+	optimal = instance_DS.solution
+	print("Optimal Cost : " + str(instance_graph.cost(optimal)))
 
 if (vis_response.lower() in ['y','yes']):
 	print("\nCreating your graph visualizations...")
