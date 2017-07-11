@@ -7,6 +7,7 @@ Dataset Setup
 ------------
 To use this program, please place the appropriate datafiles in the datasetTSP directory. 3 sample directories have been included in this repo. In the datasetTSP directory, make a folder with the name **datasetName**. Make sure to follow the nomenclature and include **datasetName**_xy.txt (x and y coordinates), **datasetName**_s.txt(solution), and **datasetName**_d.txt(adjacency matrix, this one is **optional**) in that directory. For the _s.txt, make sure to append the _s.txt file with the first node number if you are selecting a TSPdata instance from the link above. Keep in mind it is not required for you to have an adjacency matrix file. You must, however, have a _s.txt and _xy.txt file in the directory for this program to work.
 
+For the **datasetName**xy.txt file, each row of the .txt file corresponds to a single node's x- & y-coordinates. To use the data from the TSPLIB, get the xy coordinates from the **datasetName**.tsp link (att48.tsp if you want the xy coordinates). You can also find the optimal tour under the tour_section in the **datasetName**.opt.tour link in the TSPLIB link above. 
 
 Usage
 -----
