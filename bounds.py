@@ -36,10 +36,36 @@ class Bounds:
  	####		4. Output the sum of 2 and 3.
  	########
 	def calculateOTB(self):
-		initNode = random.randint(0,self.counts)
+		initNode = random.randint(0,self.counts-1)
 		#Create an AdjMatrix without the row & col containing the initNode
 		newAdjMat = self.adjMatrix.copy()
-		np.delete(newAdjMat,initNode,axis= 0)
-		np.delete(newAdjMat,initNode,axis = 1)
+		newAdjMat = np.delete(newAdjMat,initNode,axis= 0)
+		newAdjMat = np.delete(newAdjMat,initNode,axis = 1)
 		#Calculate MST length without the initNode
-		return 32
+		mst = minimum_spanning_tree(newAdjMat)
+		MSTedges = []
+		Z = mst.toarray().astype(float)
+		for i in range(len(Z)):
+			array = np.nonzero(Z[i])[0]
+			for index in array:
+				x = i
+				y = index
+				if i >= initNode:
+					x +=1
+				if index >= initNode:
+					y +=1 
+				tuplex = (x,y)
+				MSTedges.append(tuplex)
+		r = 0
+		# r is the length of the MST we have without the initNode
+		for edge in MSTedges:
+			checkEdge = edge
+			if (checkEdge not in self.edgeDict):
+				checkEdge = (edge[1],edge[0])
+			r += self.edgeDict[checkEdge]
+		s = 0
+		edgeLengths = self.adjMatrix[initNode]
+		nodeNums = range(0,self.counts)
+		twoNN = sorted(zip(edgeLengths, nodeNums))[1:3]		
+		s = twoNN[0][0] + twoNN[1][0]
+		return r + s
