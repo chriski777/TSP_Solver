@@ -27,9 +27,9 @@ while (True):
 		vis_response = raw_input("Would you like visualizations for the algorithms? (Y/N): ")		
 		break
 	except (IOError, NameError):
-		print("This is not a valid instance. Please put in a valid directory name!")
+		print("This is not a valid instance. Please put in a valid directory name! Please also make sure the  %s_s.txt file exists in the directory.")
 	except (IndexError):
-		print("Please make sure your %s_s.txt's first and last value are the same.")
+		print("Please make sure your %s_s.txt's first and last value are the same. ")
 ######################
 ###Initialization
 ######################

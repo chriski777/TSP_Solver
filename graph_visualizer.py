@@ -36,8 +36,8 @@ class graph_visualizer:
 					self.snapshotHelper(dataGraph,dataGraph.solution, newFolder,alg)
 
 	def snapshotConvHelper(self,dataGraph,algEdges, directory,alg):
+		fig = plt.figure()
 		for i in range(0,len(algEdges)):
-		    fig = plt.figure()
 		    G = nx.Graph()
 		    G.add_nodes_from(dataGraph.nodeDict.keys())
 		    nx.draw_networkx_nodes(G,dataGraph.nodeDict,node_size=10,nodelist = dataGraph.nodeDict.keys(),node_color='r')
@@ -51,8 +51,8 @@ class graph_visualizer:
 		plt.close('all')
 
 	def snapshotHelper(self,dataGraph,algEdges, directory,alg):
+		fig = plt.figure()
 		for i in range(0,len(algEdges)):
-		    fig = plt.figure()
 		    G = nx.Graph()
 		    G.add_nodes_from(dataGraph.nodeDict.keys())
 		    nx.draw_networkx_nodes(G,dataGraph.nodeDict,node_size=10,nodelist = dataGraph.nodeDict.keys(),node_color='r')
@@ -71,12 +71,12 @@ class graph_visualizer:
 
 	def snapshotChrisHelper(self,dataGraph,algEdges, directory,alg):
 		portion = {0:"MST", 1:"MW", 2: "Tour", 3: "Answer"}
+		fig = plt.figure()
 		for t in range(len(algEdges)):
 			newFolder = "%s/%s" % (directory,portion[t])
 			if not os.path.exists(newFolder):
 			    os.makedirs(newFolder)
 			for i in range(0,len(algEdges[t])):
-			    fig = plt.figure()
 			    G = nx.Graph()
 			    G.add_nodes_from(dataGraph.nodeDict.keys())
 			    nx.draw_networkx_nodes(G,dataGraph.nodeDict,node_size=10,nodelist = dataGraph.nodeDict.keys(),node_color='r')
