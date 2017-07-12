@@ -17,21 +17,47 @@ class Bounds:
 	####  	An iterative estimation provided by the book "The Traveling Salesman Problem" (Reinhalt)
 	####		1. 
 	def calculateHKLB(self):
-		#Start with first node
-		currNode = 0
-		#initialize city weights as zeros (weights for vertices or node numbers)
-		pi_vector = np.zeros(self.counts)
-		Hstar = -10000000000
-		alpha = 2
-		beta = 0.5
-		numIterations = 100
+		#Input Parameters
 		# U our upper bound target value is selected as 2* cost of the MST
 		U = self.calculateMSTUpperBound
-		#t is the step size
-		
-		#update each edge 
+		iterationFactor = 0.015
+		maxChanges = 100
+		#initialize city weights as zeros (weights for vertices or node numbers)
+		nodeNumbers= np.zeros(self.counts)
+		hkBound = -10000000000
+		tsmall = 0.001
+		alpha = 2
+		beta = 0.5
+		numIterations = int(round(iterationFactor* self.counts))
+		newAdjMat = self.adjMatrix.copy()
+		result = self.calculateOTB(self.adjMatrix)
+		ourTree = result[1]
+		for i in range(0, maxChanges):
+			for k in range(0, numIterations):
+				tempMatrix = self.calcNewMatrix(newAdjMat,nodeNumbers)
+				result = self.calculateOTB(tempMatrix)
+				oneTreeBound = result[0]
+				oneTreeEdges = result[1]
+				if oneTreeBound > hkBound:
+					hkBound = oneTreeBound	
+				if self.isATour(oneTreeEdges):
+					break
+			if self.isATour(oneTreeEdges):
+				break
+		return hkBound
+	def calcNewMatrix(self,adjMatrix,nodeNumbers):
+		temp = adjMatrix.copy()
+		m = len(temp)
+		#i is the index
+		for i in range(0,m):
+			temp[i] -= nodeNumbers[i]
+			temp[:,i] -= nodeNumbers[i]
+			temp[i][i] = 0
+		return temp
 
-		return 5
+	def isATour(self,path):
+		tour = True
+		return tour
 	########
 	####  1-tree Bound 
 	####  	A form of lower bound that utilizes the 1-tree based on Chapter 7 of The Traveling Salesman Problem: A Computational Study by Cook
@@ -41,11 +67,12 @@ class Bounds:
  	####		4. Output the sum of 2 and 3.
  	####	The 1-Tree bound should approximately be 90.5% of the optimal cost. The best 1-Tree lower bound will be the maximum cost of the many MSTs we get.
  	########
-	def calculateOTB(self):
+	def calculateOTB(self,adjMatrix):
 		maxOTBLB = -10000000
+		bestTree = []
 		for initNode in range(0,self.counts):
 			#Create an AdjMatrix without the row & col containing the initNode
-			newAdjMat = self.adjMatrix.copy()
+			newAdjMat = adjMatrix
 			newAdjMat = np.delete(newAdjMat,initNode,axis= 0)
 			newAdjMat = np.delete(newAdjMat,initNode,axis = 1)
 			#Calculate MST length without the initNode
@@ -72,14 +99,18 @@ class Bounds:
 				r += self.edgeDict[checkEdge]
 			# s is the sum of the cheapest two edges incident with the random node v0.
 			s = 0
-			edgeLengths = self.adjMatrix[initNode]
+			edgeLengths = adjMatrix[initNode]
 			nodeNums = range(0,self.counts)
-			twoNN = sorted(zip(edgeLengths, nodeNums))[1:3]		
+			twoNN = sorted(zip(edgeLengths, nodeNums))[1:3]	
 			s = twoNN[0][0] + twoNN[1][0]
 			temp = r + s
 			if temp > maxOTBLB:
 				maxOTBLB = temp
-		return maxOTBLB
+				oneTreeEdges = MSTedges[:]
+				oneTreeEdges.append((initNode,twoNN[0][1]))
+				oneTreeEdges.append((initNode,twoNN[1][1]))
+				bestTree = oneTreeEdges
+		return [maxOTBLB, oneTreeEdges]
 	def calculateMSTUpperBound(self):
 		mst = minimum_spanning_tree(self.adjMatrix)
 		MSTedges = []

@@ -26,7 +26,7 @@ class Graph_TSP:
 	def HKLowerBoundCost(self):
 		return self.Bounds.calculateHKLB()
 	def oneTreeBound(self):
-		return self.Bounds.calculateOTB()
+		return self.Bounds.calculateOTB(self.adjMatrix)[0]
 	def upperBound(self):
 		return self.Bounds.calculateMSTUpperBound()
 	#Random solution formed by shuffling nodes 
