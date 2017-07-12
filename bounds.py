@@ -14,18 +14,23 @@ class Bounds:
 				self.edgeDict[vertices] = self.adjMatrix[i,j]
 	########
 	####  Held-Karp Lower Bound 
-	####  	An iterative estimation provided by the book "The Traveling Salesman" (Reinhalt)
+	####  	An iterative estimation provided by the book "The Traveling Salesman Problem" (Reinhalt)
 	####		1. 
 	def calculateHKLB(self):
 		#Start with first node
 		currNode = 0
-		#initialize city weights as zeros
-		subgraph_HK = 0
+		#initialize city weights as zeros (weights for vertices or node numbers)
 		pi_vector = np.zeros(self.counts)
-		#initialize 20 nearest neighbors to currNode
-		nodeNums = range(0,self.counts )
-		edgeLengths = self.adjMatrix[currNode]
-		twentyNN = sorted(zip(edgeLengths, nodeNums))[1:21]
+		Hstar = -10000000000
+		alpha = 2
+		beta = 0.5
+		numIterations = 100
+		# U our upper bound target value is selected as 2* cost of the MST
+		U = self.calculateMSTUpperBound
+		#t is the step size
+		
+		#update each edge 
+
 		return 5
 	########
 	####  1-tree Bound 
@@ -75,3 +80,19 @@ class Bounds:
 			if temp > maxOTBLB:
 				maxOTBLB = temp
 		return maxOTBLB
+	def calculateMSTUpperBound(self):
+		mst = minimum_spanning_tree(self.adjMatrix)
+		MSTedges = []
+		Z = mst.toarray().astype(float)
+		for i in range(len(Z)):
+			array = np.nonzero(Z[i])[0]
+			for index in array:
+				tuplex = (i,index)
+				MSTedges.append(tuplex)
+		cost = 0
+		for edge in MSTedges:
+			checkEdge = edge
+			if (checkEdge not in self.edgeDict):
+				checkEdge = (edge[1],edge[0])
+			cost += self.edgeDict[checkEdge]
+		return 2*cost

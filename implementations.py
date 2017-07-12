@@ -43,6 +43,7 @@ convHullTour, visualTour = instance_graph.convexhullInsert()
 oneTreeLB= instance_graph.oneTreeBound()
 christoFides = instance_graph.christoFides()[3]
 HKLB = instance_graph.HKLowerBoundCost()
+upperBound = instance_graph.upperBound()
 
 print("Cost for random Solution: " + str(instance_graph.cost(randomSol)))
 print("Cost for nearestNeighbor: " + str(instance_graph.cost(nearestNeighbor)))
@@ -51,6 +52,7 @@ print("Cost for Convex Hull Insertion : " + str(instance_graph.cost(convHullTour
 print("Cost for Christofides : " + str(instance_graph.cost(christoFides)))
 print("The one-tree Lower Bound is: " + str(oneTreeLB))
 print("The HK Lower Bound is: " + str(HKLB))
+print("The Upper Bound (Calculated by 2*cost of MST) is: "  + str(upperBound))
 if solExist:
 	optimal = instance_DS.solution
 	print("Optimal Cost : " + str(instance_graph.cost(optimal)))

@@ -27,6 +27,8 @@ class Graph_TSP:
 		return self.Bounds.calculateHKLB()
 	def oneTreeBound(self):
 		return self.Bounds.calculateOTB()
+	def upperBound(self):
+		return self.Bounds.calculateMSTUpperBound()
 	#Random solution formed by shuffling nodes 
 	#Meant to provide bad solutions
 	def randomSolution(self):
