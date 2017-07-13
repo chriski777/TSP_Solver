@@ -5,7 +5,11 @@ This program allows for visualization and approximation of four TSP approximatio
 
 Packages Needed 
 ------------
-**Networkx**: https://pypi.python.org/pypi/networkx/
+**Networkx**: https://pypi.python.org/pypi/networkx/ Make sure to download the networkx-1.11.tar.gz (md5) file and extract the folder networkx-1.11. Navigate to that folder and then use the command
+
+```
+python setup.py install
+```
 
 **Numpy**: https://www.scipy.org/scipylib/download.html
 
