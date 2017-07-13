@@ -19,13 +19,11 @@ class Bounds:
 	def calculateHKLB(self):
 		#Input Parameters
 		# U our upper bound target value is selected as roughly 115% of the OTB lower bound
+		#U = 1.15* self.calculateOTB(self.adjMatrix)[0]
 		U = self.calculateMSTUpperBound()
 		iterationFactor = 0.015
 		maxChanges = 100
 		hkBound = -10000000000000000
-		'''
-		reinhalt solution
-		'''
 		tsmall = 0.001
 		alpha = 1
 		beta = 0.5
@@ -34,24 +32,22 @@ class Bounds:
 		numIterations = int(round(iterationFactor* self.counts))
 		tVector = np.zeros(numIterations)
 		newAdjMat = self.adjMatrix.copy()
-		result = self.calculateOTB(self.adjMatrix)
-		ourTree = result[1]
 		for i in range(0, maxChanges):
 			for k in range(0, numIterations):
 				tempMatrix = self.calcNewMatrix(newAdjMat,nodeNumbers)
 				result = self.calculateOTB(tempMatrix)
 				oneTreeBound = result[0]
 				oneTreeEdges = result[1]
-				if oneTreeBound > hkBound:
-					hkBound = oneTreeBound	
+				newHkBound = oneTreeBound + 2*np.sum(nodeNumbers)
+				if newHkBound > hkBound:
+					hkBound = newHkBound	
 				#aTour contains a boolean that says if it's a tour and corresponding degDict
 				aTour = self.isATourOT(oneTreeEdges)
 				if aTour[0]:
 					return hkBound
 				degsVals = aTour[1].values()
-
 				sumAllDegs = float(np.sum(np.square(2 - np.array(degsVals))))
-				tVector[k] = alpha*(U - oneTreeBound)/sumAllDegs
+				tVector[k] = alpha*(U - newHkBound)/sumAllDegs
 				if tVector[k] < tsmall:
 					return hkBound
 				deltNode = tVector[k]*(2 - np.array(degsVals))
@@ -133,7 +129,7 @@ class Bounds:
 				oneTreeEdges.append((initNode,twoNN[0][1]))
 				oneTreeEdges.append((initNode,twoNN[1][1]))
 				bestTree = oneTreeEdges
-		return [maxOTBLB, oneTreeEdges]
+		return [maxOTBLB, bestTree]
 	def calculateMSTUpperBound(self):
 		mst = minimum_spanning_tree(self.adjMatrix)
 		MSTedges = []
