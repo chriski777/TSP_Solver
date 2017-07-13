@@ -19,8 +19,7 @@ class Bounds:
 	def calculateHKLB(self):
 		#Input Parameters
 		# U our upper bound target value is selected as roughly 115% of the OTB lower bound
-		#U = 1.15* self.calculateOTB(self.adjMatrix)[0]
-		U = self.calculateMSTUpperBound()
+		U = 1.15* self.calculateOTB(self.adjMatrix)[0]
 		iterationFactor = 0.015
 		maxChanges = 100
 		hkBound = -10000000000000000
@@ -35,7 +34,7 @@ class Bounds:
 		for i in range(0, maxChanges):
 			for k in range(0, numIterations):
 				tempMatrix = self.calcNewMatrix(newAdjMat,nodeNumbers)
-				result = self.calculateOTB(tempMatrix)
+				result = self.calculateOptimalOTB(tempMatrix)
 				oneTreeBound = result[0]
 				oneTreeEdges = result[1]
 				newHkBound = oneTreeBound + 2*np.sum(nodeNumbers)
@@ -90,35 +89,11 @@ class Bounds:
 		maxOTBLB = -10000000
 		bestTree = []
 		for initNode in range(0,self.counts):
-			#Create an AdjMatrix without the row & col containing the initNode
-			newAdjMat = adjMatrix
-			newAdjMat = np.delete(newAdjMat,initNode,axis= 0)
-			newAdjMat = np.delete(newAdjMat,initNode,axis = 1)
-			#Calculate MST length without the initNode
-			mst = minimum_spanning_tree(newAdjMat)
-			MSTedges = []
-			Z = mst.toarray().astype(float)
-			for i in range(len(Z)):
-				array = np.nonzero(Z[i])[0]
-				for index in array:
-					x = i
-					y = index
-					if i >= initNode:
-						x +=1
-					if index >= initNode:
-						y +=1 
-					tuplex = (x,y)
-					MSTedges.append(tuplex)
-			r = 0
-			# r is the length of the MST we have without the initNode
-			for edge in MSTedges:
-				checkEdge = edge
-				if (checkEdge not in self.edgeDict):
-					checkEdge = (edge[1],edge[0])
-				r += self.edgeDict[checkEdge]
+			MSTedges = self.OTBHelper(adjMatrix,initNode)
+			r = self.calcCost(MSTedges)
 			# s is the sum of the cheapest two edges incident with the random node v0.
 			s = 0
-			edgeLengths = adjMatrix[initNode]
+			edgeLengths = adjMatrix[initNode]	
 			nodeNums = range(0,self.counts)
 			twoNN = sorted(zip(edgeLengths, nodeNums))[1:3]	
 			s = twoNN[0][0] + twoNN[1][0]
@@ -130,6 +105,61 @@ class Bounds:
 				oneTreeEdges.append((initNode,twoNN[1][1]))
 				bestTree = oneTreeEdges
 		return [maxOTBLB, bestTree]
+	def calculateOptimalOTB(self,adjMatrix):
+		minOTBLB = 1000000
+		bestTree = []
+		for initNode in range(0,self.counts):
+			MSTedges = self.OTBHelper(adjMatrix,initNode)
+			r = self.calcAdjustedCost(MSTedges, adjMatrix)
+			# s is the sum of the cheapest two edges incident with the random node v0.
+			s = 0
+			edgeLengths = adjMatrix[initNode]	
+			nodeNums = range(0,self.counts)
+			twoNN = sorted(zip(edgeLengths, nodeNums))[1:3]	
+			s = twoNN[0][0] + twoNN[1][0]
+			temp = r + s
+			if temp < minOTBLB:
+				minOTBLB = temp
+				oneTreeEdges = MSTedges[:]
+				oneTreeEdges.append((initNode,twoNN[0][1]))
+				oneTreeEdges.append((initNode,twoNN[1][1]))
+				bestTree = oneTreeEdges
+		return [minOTBLB, bestTree]
+	def OTBHelper(self,adjMatrix,initNode):
+		#Create an AdjMatrix without the row & col containing the initNode
+		newAdjMat = adjMatrix
+		newAdjMat = np.delete(newAdjMat,initNode,axis= 0)
+		newAdjMat = np.delete(newAdjMat,initNode,axis = 1)
+		#Calculate MST length without the initNode
+		mst = minimum_spanning_tree(newAdjMat)
+		MSTedges = []
+		Z = mst.toarray().astype(float)
+		for i in range(len(Z)):
+			array = np.nonzero(Z[i])[0]
+			for index in array:
+				x = i
+				y = index
+				if i >= initNode:
+					x +=1
+				if index >= initNode:
+					y +=1 
+				tuplex = (x,y)
+				MSTedges.append(tuplex)
+		return MSTedges
+	def calcAdjustedCost(self,MSTedges, adjMatrix):
+		r = 0
+		for edge in MSTedges:
+			r += adjMatrix[edge[0],edge[1]]
+		return r
+	def calcCost(self,MSTedges):
+		# r is the length of the MST we have without the initNode
+		r = 0
+		for edge in MSTedges:
+			checkEdge = edge
+			if (checkEdge not in self.edgeDict):
+				checkEdge = (edge[1],edge[0])
+			r += self.edgeDict[checkEdge]
+		return r
 	def calculateMSTUpperBound(self):
 		mst = minimum_spanning_tree(self.adjMatrix)
 		MSTedges = []

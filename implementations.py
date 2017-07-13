@@ -22,6 +22,10 @@ while (True):
 		if sol_response.lower() in ['n', 'no'] :
 			print("That's alright! The 1-tree LB or the HKLB can be used as reference points for comparisons across the 4 algorithms. ")
 			solExist = False
+		hklb_response = raw_input("Would you like the Held-Karp Lower Bound to be included? The computation for this may take awhile and will increase the waiting time.(Y/N): ")
+		hklbExist = True
+		if hklb_response.lower() in ['n', 'no']:
+			hklbExist = False
 		#Feed in a directory which has your xy coordinates and your adjacency matrices
 		instance_DS = D.dataset_processing(dataDir,instanceName, solExist)
 		vis_response = raw_input("Would you like visualizations for the algorithms? (Y/N): ")		
@@ -42,7 +46,6 @@ greedy = instance_graph.greedy()
 convHullTour, visualTour = instance_graph.convexhullInsert()
 oneTreeLB= instance_graph.oneTreeBound()
 christoFides = instance_graph.christoFides()[3]
-HKLB = instance_graph.HKLowerBoundCost()
 upperBound = instance_graph.upperBound()
 
 print("Cost for random Solution: " + str(instance_graph.cost(randomSol)))
@@ -51,7 +54,9 @@ print("Cost for greedy: " + str(instance_graph.cost(greedy)))
 print("Cost for Convex Hull Insertion : " + str(instance_graph.cost(convHullTour)))
 print("Cost for Christofides : " + str(instance_graph.cost(christoFides)))
 print("The one-tree Lower Bound is: " + str(oneTreeLB))
-print("The HK Lower Bound is: " + str(HKLB))
+if hklbExist:
+	HKLB = instance_graph.HKLowerBoundCost()
+	print("The HK Lower Bound is: " + str(HKLB))
 print("The Upper Bound (Calculated by 2*cost of MST) is: "  + str(upperBound))
 if solExist:
 	optimal = instance_DS.solution
