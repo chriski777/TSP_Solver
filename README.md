@@ -66,4 +66,4 @@ The visualizations, if you typed in 'Y', will be saved in a directory with the n
 ```
 and you should see distinct images in multiple folders. These images have not been stitched yet to form a movie. You can use imageJ to convert these images into a video. Enjoy! 
 
-Example visualization [link](https://chriski777.github.io/graph_website/).
+Example visualization [link](https://chriski777.github.io/TSP_Solver_Website/.
