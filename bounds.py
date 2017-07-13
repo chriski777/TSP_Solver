@@ -14,7 +14,7 @@ class Bounds:
 				self.edgeDict[vertices] = self.adjMatrix[i,j]
 	########
 	####  Held-Karp Lower Bound 
-	####  	An iterative estimation provided by the book "The Traveling Salesman Problem" (Reinhalt)
+	####  	An iterative estimation 
 	####
 	def calculateHKLB(self):
 		#Input Parameters
@@ -160,6 +160,10 @@ class Bounds:
 				checkEdge = (edge[1],edge[0])
 			r += self.edgeDict[checkEdge]
 		return r
+	#####
+	####  MST Upper Bound 
+	####    Simply 2* the MST cost of the original dataSet
+	####
 	def calculateMSTUpperBound(self):
 		mst = minimum_spanning_tree(self.adjMatrix)
 		MSTedges = []
