@@ -34,6 +34,12 @@ Do you have a solution .txt file for your instance?(Y/N):
 ```
 If you have not included a _s.txt file in your directory, type in 'N'. If you have, type in 'Y'. If you answer 'Y', the cost of your optimal tour in the _s.txt file will be calculated and displayed.
 
+You will then be prompeted about whether or not you would like the HKLB to be included in the display. The HKLB uses the iterative approach and may take awhile depending on the number of nodes your TSP instance has. 
+```
+Would you like the Held-Karp Lower Bound to be included? The computation for this may take awhile and will increase the waiting time.(Y/N): y
+```
+To find the best HKLB, one can only find the strictest lower bound through experimentation of different U (Target Values) in bounds.py line 22. Currently, it is set to 115% of the One-Tree Lower Bound. By changing the U, you may get tighter lower bounds. 
+
 You will then be prompted to whether or not you would like visualizations.
 ```
 Would you like visualizations for the algorithms? (Y/N): 
