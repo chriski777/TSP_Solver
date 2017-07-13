@@ -20,7 +20,7 @@ while (True):
 		sol_response = raw_input("Do you have a solution .txt file for your instance?(Y/N): ")
 		solExist = True
 		if sol_response.lower() in ['n', 'no'] :
-			print("That's alright! The 1-tree LB and HKLB can be used as reference points for comparisons across the 4 algorithms. ")
+			print("That's alright! The 1-tree LB or the HKLB can be used as reference points for comparisons across the 4 algorithms. ")
 			solExist = False
 		#Feed in a directory which has your xy coordinates and your adjacency matrices
 		instance_DS = D.dataset_processing(dataDir,instanceName, solExist)

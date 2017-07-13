@@ -15,20 +15,24 @@ class Bounds:
 	########
 	####  Held-Karp Lower Bound 
 	####  	An iterative estimation provided by the book "The Traveling Salesman Problem" (Reinhalt)
-	####		1. 
+	####
 	def calculateHKLB(self):
 		#Input Parameters
-		# U our upper bound target value is selected as 2* cost of the MST
-		U = self.calculateMSTUpperBound
+		# U our upper bound target value is selected as roughly 115% of the OTB lower bound
+		U = self.calculateMSTUpperBound()
 		iterationFactor = 0.015
 		maxChanges = 100
+		hkBound = -10000000000000000
+		'''
+		reinhalt solution
+		'''
+		tsmall = 0.001
+		alpha = 1
+		beta = 0.5
 		#initialize city weights as zeros (weights for vertices or node numbers)
 		nodeNumbers= np.zeros(self.counts)
-		hkBound = -10000000000
-		tsmall = 0.001
-		alpha = 2
-		beta = 0.5
 		numIterations = int(round(iterationFactor* self.counts))
+		tVector = np.zeros(numIterations)
 		newAdjMat = self.adjMatrix.copy()
 		result = self.calculateOTB(self.adjMatrix)
 		ourTree = result[1]
@@ -40,10 +44,19 @@ class Bounds:
 				oneTreeEdges = result[1]
 				if oneTreeBound > hkBound:
 					hkBound = oneTreeBound	
-				if self.isATour(oneTreeEdges):
-					break
-			if self.isATour(oneTreeEdges):
-				break
+				#aTour contains a boolean that says if it's a tour and corresponding degDict
+				aTour = self.isATourOT(oneTreeEdges)
+				if aTour[0]:
+					return hkBound
+				degsVals = aTour[1].values()
+
+				sumAllDegs = float(np.sum(np.square(2 - np.array(degsVals))))
+				tVector[k] = alpha*(U - oneTreeBound)/sumAllDegs
+				if tVector[k] < tsmall:
+					return hkBound
+				deltNode = tVector[k]*(2 - np.array(degsVals))
+				nodeNumbers = nodeNumbers + deltNode
+			alpha = beta*alpha
 		return hkBound
 	def calcNewMatrix(self,adjMatrix,nodeNumbers):
 		temp = adjMatrix.copy()
@@ -54,10 +67,20 @@ class Bounds:
 			temp[:,i] -= nodeNumbers[i]
 			temp[i][i] = 0
 		return temp
-
-	def isATour(self,path):
-		tour = True
-		return tour
+	# This function only checks if each node in the 1-tree has degree 2. A 1-tree implies connectedness. If every node has degree 2, 
+	# a one-tree must be a tour. 
+	def isATourOT(self,oneTree):
+		nodes = range(0,self.counts)
+		degreeDict = {node : 0 for node in nodes}
+		for edge in oneTree:
+			x = edge[0]
+			y = edge[1]
+			degreeDict[x] += 1
+			degreeDict[y] += 1
+		for i in nodes:
+			if degreeDict[i] != 2:
+				return [False, degreeDict]
+		return [True, degreeDict]
 	########
 	####  1-tree Bound 
 	####  	A form of lower bound that utilizes the 1-tree based on Chapter 7 of The Traveling Salesman Problem: A Computational Study by Cook
