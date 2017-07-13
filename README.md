@@ -11,7 +11,7 @@ Packages Needed
 python setup.py install
 ```
 
-**Numpy & SciPy**: https://www.continuum.io/downloads Download and run the installer.
+**Numpy & SciPy**: https://www.continuum.io/downloads Download and run the installer. If you're using Windows make sure to check the 'Add Anaconda to my PATH environment variable'. 
 
 Dataset Setup
 ------------
