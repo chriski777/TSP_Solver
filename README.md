@@ -11,11 +11,7 @@ Packages Needed
 python setup.py install
 ```
 
-**Numpy**: https://sourceforge.net/projects/numpy/files/NumPy/ Download the latest version and extract the folder numpy-1.11.2. Navigate 
-
-to the folder and use the same command as above.
-
-**SciPy**: https://pypi.python.org/pypi/scipy/ Download scipy-0.19.1.tar.gz (md5, pgp). Do the same as above.
+**Numpy & SciPy**: https://www.continuum.io/downloads Download and run the installer.
 
 Dataset Setup
 ------------
