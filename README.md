@@ -11,9 +11,7 @@ Packages Needed
 python setup.py install
 ```
 
-**Numpy**: https://www.scipy.org/scipylib/download.html
-
-**SciPy**: https://www.scipy.org/scipylib/download.html
+**Numpy & SciPy**: https://www.continuum.io/downloads Download and run the installer for anaconda.
 
 Dataset Setup
 ------------
