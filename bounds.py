@@ -14,7 +14,8 @@ class Bounds:
 				self.edgeDict[vertices] = self.adjMatrix[i,j]
 	########
 	####  Held-Karp Lower Bound 
-	####  	An iterative estimation 
+	####  	An iterative estimation that provides the tightest lower bound for a TSP. The HKLB differs based on U (Target Value).
+	####    One can determine the best HKLB through experimentations of U for each TSP instance.
 	####
 	def calculateHKLB(self):
 		#Input Parameters
@@ -26,18 +27,20 @@ class Bounds:
 		tsmall = 0.001
 		alpha = 1
 		beta = 0.5
-		#initialize city weights as zeros (weights for vertices or node numbers)
 		nodeNumbers= np.zeros(self.counts)
 		numIterations = int(round(iterationFactor* self.counts))
 		tVector = np.zeros(numIterations)
 		newAdjMat = self.adjMatrix.copy()
 		for i in range(0, maxChanges):
 			for k in range(0, numIterations):
+				#Calcuate the new edge weights based on nodeNumbers
 				tempMatrix = self.calcNewMatrix(newAdjMat,nodeNumbers)
 				result = self.calculateOptimalOTB(tempMatrix)
 				oneTreeBound = result[0]
 				oneTreeEdges = result[1]
+				#HKBound is given as the sum of the OTB of the adjusted edges and 2* the sum of the nodeNumbers
 				newHkBound = oneTreeBound + 2*np.sum(nodeNumbers)
+				#Improvement of hKBound
 				if newHkBound > hkBound:
 					hkBound = newHkBound	
 				#aTour contains a boolean that says if it's a tour and corresponding degDict
@@ -47,10 +50,12 @@ class Bounds:
 				degsVals = aTour[1].values()
 				sumAllDegs = float(np.sum(np.square(2 - np.array(degsVals))))
 				tVector[k] = alpha*(U - newHkBound)/sumAllDegs
+				#Terminate when the stepSize is too small
 				if tVector[k] < tsmall:
 					return hkBound
 				deltNode = tVector[k]*(2 - np.array(degsVals))
 				nodeNumbers = nodeNumbers + deltNode
+			#Changes the decrement factor each loop
 			alpha = beta*alpha
 		return hkBound
 	def calcNewMatrix(self,adjMatrix,nodeNumbers):

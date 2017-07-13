@@ -48,6 +48,7 @@ oneTreeLB= instance_graph.oneTreeBound()
 christoFides = instance_graph.christoFides()[3]
 upperBound = instance_graph.upperBound()
 
+
 print("Cost for random Solution: " + str(instance_graph.cost(randomSol)))
 print("Cost for nearestNeighbor: " + str(instance_graph.cost(nearestNeighbor)))
 print("Cost for greedy: " + str(instance_graph.cost(greedy)))
