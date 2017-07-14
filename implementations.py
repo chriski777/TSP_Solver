@@ -48,7 +48,6 @@ oneTreeLB= instance_graph.oneTreeBound()
 christoFides = instance_graph.christoFides()[3]
 upperBound = instance_graph.upperBound()
 
-
 print("Cost for random Solution: " + str(instance_graph.cost(randomSol)))
 print("Cost for nearestNeighbor: " + str(instance_graph.cost(nearestNeighbor)))
 print("Cost for greedy: " + str(instance_graph.cost(greedy)))
@@ -62,7 +61,6 @@ print("The Upper Bound (Calculated by 2*cost of MST) is: "  + str(upperBound))
 if solExist:
 	optimal = instance_DS.solution
 	print("Optimal Cost : " + str(instance_graph.cost(optimal)))
-
 if (vis_response.lower() in ['y','yes']):
 	print("\nCreating your graph visualizations...")
 	graph_visuals = graphVis.graph_visualizer(solExist)

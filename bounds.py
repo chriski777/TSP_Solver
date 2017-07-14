@@ -29,6 +29,8 @@ class Bounds:
 		beta = 0.5
 		nodeNumbers= np.zeros(self.counts)
 		numIterations = int(round(iterationFactor* self.counts))
+		if numIterations == 0:
+			numIterations +=1
 		tVector = np.zeros(numIterations)
 		newAdjMat = self.adjMatrix.copy()
 		for i in range(0, maxChanges):
