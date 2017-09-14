@@ -1,7 +1,21 @@
-## Graph_algorithms
+# TSP_SOLVER
+
+## Table of Contents  
+* [Overview](#overview)
+* [Dataset Setup](#setHeader)
+* [Usage](#usageHeader)
+
+ 
+
+<a name="overview"/>
+
+Overview
+------------
 Link to Report on TSP Approximation: [link](https://www.overleaf.com/read/kxcbxmmbpnkx).
 
 This program allows for visualization and approximation of four TSP approximation algorithms (Greedy, Nearest-neighbor, Christofides, and conv-hull insertion heuristic). It provides the cost of each algorithm on a user-provided TSP dataset. Keep in mind the algorithms **only** work for a symmetric complete graph. This program ALSO provides two lower bounds on the optimal cost: 1-Tree Lower Bound and the HK Lower Bound. You can then compare these approximations to the optimal solution (which is usually provided on http://elib.zib.de/pub/mp-testdata/tsp/tsplib/tsp/index.html along with TSP datasets.) Feel free to let me know of any bugs!
+
+<a name="packagesHeader"/>
 
 Packages Needed 
 ------------
@@ -13,6 +27,8 @@ python setup.py install
 
 **Numpy & SciPy**: https://www.continuum.io/downloads Download and run the installer. If you're using Windows make sure to check the 'Add Anaconda to my PATH environment variable'. 
 
+<a name="setHeader"/>
+
 Dataset Setup
 ------------
 To use this program, please place the appropriate datafiles in the datasetTSP directory. 3 sample directories have been included in this repo. In the datasetTSP directory, make a folder with the name **datasetName**. Make sure to follow the nomenclature and include **datasetName**_xy.txt (x and y coordinates), **datasetName**_s.txt(solution), and **datasetName**_d.txt(adjacency matrix, this one is **optional**) in that directory. 
@@ -22,6 +38,8 @@ For the _s.txt, make sure to append the _s.txt file with the first node number i
 If you use a solution file for a particular instance from the TSPLib, you might want to also use the adjacency matrix that corresponds to the same instance. It's not required but sometimes the edge lengths in the problem might not be determined by the euclidean distance between the two nodes connected by that edge (EX: pa561.tsp). Also, some of these adjacency matrices may be provided as symmetric matrices that omit the upper triangular portions. If you fill in the upper triangular portion, you can still use it with this TSP Solver. This Solver requires for the adjacency matrix to be square and symmetric. It must not omit any portion of the matrix. 
 
 For the **datasetName**xy.txt file, each row of the .txt file corresponds to a single node's x- & y-coordinates. To use the data from the TSPLIB, get the xy coordinates from the **datasetName**.tsp link (att48.tsp if you want the xy coordinates). You can also find the optimal tour under the tour_section in the **datasetName**.opt.tour link in the TSPLIB link above. 
+
+<a name="usageHeader"/>
 
 Usage
 -----
