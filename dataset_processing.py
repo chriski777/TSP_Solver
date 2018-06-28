@@ -1,7 +1,7 @@
 import numpy as np
-######################
-###Data Processing
-######################
+#######################
+####Data Processing####
+#######################
 class dataset_processing:
 	def __init__(self, folder, dsName, solExist):
 		self.dataDir = "%s/%s" % (folder, dsName)

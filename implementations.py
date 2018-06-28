@@ -38,14 +38,14 @@ while (True):
 ###Initialization
 ######################
 instance_graph = Graph.Graph_TSP(instance_DS.nodeDict,instance_DS.adjMatrix, instanceName, instance_DS.solution)
+nodeDict = instance_graph.nodeDict
 
 randomSol = instance_graph.randomSolution()
 nearestNeighbor = instance_graph.nearestNeighbor()
-nodeDict = instance_graph.nodeDict
 greedy = instance_graph.greedy()
 convHullTour, visualTour = instance_graph.convexhullInsert()
 oneTreeLB= instance_graph.oneTreeBound()
-christoFides = instance_graph.christoFides()[3]
+christoFides = instance_graph.christofides()
 upperBound = instance_graph.upperBound()
 
 print("Cost for random Solution: " + str(instance_graph.cost(randomSol)))

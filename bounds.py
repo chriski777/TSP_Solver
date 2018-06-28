@@ -12,11 +12,11 @@ class Bounds:
 			for j in range(i+1, self.counts):
 				vertices = (i,j)
 				self.edgeDict[vertices] = self.adjMatrix[i,j]
-	########
-	####  Held-Karp Lower Bound 
-	####  	An iterative estimation that provides the tightest lower bound for a TSP. The HKLB differs based on U (Target Value).
-	####    One can determine the best HKLB through experimentations of U for each TSP instance.
-	####
+	'''
+	Held-Karp Lower Bound 
+       An iterative estimation that provides the tightest lower bound for a TSP. The HKLB differs based on U (Target Value).
+	   One can determine the best HKLB through experimentations of U for each TSP instance.
+	'''
 	def calculateHKLB(self):
 		#Input Parameters
 		# U our upper bound target value is selected as roughly 115% of the OTB lower bound
@@ -83,15 +83,15 @@ class Bounds:
 			if degreeDict[i] != 2:
 				return [False, degreeDict]
 		return [True, degreeDict]
-	########
-	####  1-tree Bound 
-	####  	A form of lower bound that utilizes the 1-tree based on Chapter 7 of The Traveling Salesman Problem: A Computational Study by Cook
-	####		1. Pick a random node v0.
- 	####		2. Get the length of the MST after disregarding the random node. 
- 	####		3. Let S be the sum of the cheapest two edges incident with the random node v0. 
- 	####		4. Output the sum of 2 and 3.
- 	####	The 1-Tree bound should approximately be 90.5% of the optimal cost. The best 1-Tree lower bound will be the maximum cost of the many MSTs we get.
- 	########
+	'''
+	1-tree Bound 
+	  	A form of lower bound that utilizes the 1-tree based on Chapter 7 of The Traveling Salesman Problem: A Computational Study by Cook
+			1. Pick a random node v0.
+ 			2. Get the length of the MST after disregarding the random node. 
+ 			3. Let S be the sum of the cheapest two edges incident with the random node v0. 
+ 			4. Output the sum of 2 and 3.
+ 		The 1-Tree bound should approximately be 90.5% of the optimal cost. The best 1-Tree lower bound will be the maximum cost of the many MSTs we get.
+ 	'''
 	def calculateOTB(self,adjMatrix):
 		maxOTBLB = -10000000
 		bestTree = []
@@ -167,10 +167,10 @@ class Bounds:
 				checkEdge = (edge[1],edge[0])
 			r += self.edgeDict[checkEdge]
 		return r
-	#####
-	####  MST Upper Bound 
-	####    Simply 2* the MST cost of the original dataSet
-	####
+	'''
+	  MST Upper Bound 
+	    Simply 2* the MST cost of the original dataSet
+	'''
 	def calculateMSTUpperBound(self):
 		mst = minimum_spanning_tree(self.adjMatrix)
 		MSTedges = []
