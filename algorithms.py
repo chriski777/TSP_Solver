@@ -48,30 +48,16 @@ class Algorithms:
 		node = unvisitedNodes.pop()
 		visitedNodes.append(node)
 		while unvisitedNodes:
-			edges = np.copy(self.adjMatrix[node])
-			chosen = []
 			#Select current node's closest neighbor (minimum edge weight)
-			while not chosen:
-				if len(edges) != 0:
-					minVal = np.min(edges)
-					minIndex = np.where(self.adjMatrix[node] == minVal)[0][0]
-				#If edges is empty, repopulate from original adjMatrix
-				if len(edges) == 0:
-					edges = np.array([self.adjMatrix[node][x] for x in unvisitedNodes])
-					minVal = np.min(edges)
-					minIndex = -1
-					for x in unvisitedNodes:
-						if minVal == self.adjMatrix[node][x]:
-							minIndex = x
-				#Check if chosen minIndex is visited or not
-				if minIndex not in visitedNodes:
-					chosen.append(minIndex)
-					node = minIndex
-					unvisitedNodes.remove(minIndex)
-					visitedNodes.append(minIndex)
-				else:
-					minEdgeIndex = np.where(edges == minVal)[0][0]
-					edges = np.delete(edges,minEdgeIndex)
+			edges = np.copy(self.adjMatrix[node])
+			sortedIndices = np.argsort(edges)
+			for index in sortedIndices:
+				if index not in visitedNodes:
+					minIndex = index
+					break
+			unvisitedNodes.remove(minIndex)
+			visitedNodes.append(minIndex)
+			node = minIndex
 		for i in range(0,self.counts):
 			if i < self.counts - 1:
 				edgePath.append((visitedNodes[i],visitedNodes[i+1]))
