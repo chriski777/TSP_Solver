@@ -190,8 +190,7 @@ class Algorithms:
 		    for j in range(len(OddVerts)):
 		        if i != j:
 		            H.add_edge(OddVerts[i],OddVerts[j],weight = -self.adjMatrix[OddVerts[i]][OddVerts[j]])
-		edgeMWDict = naa.max_weight_matching(H, maxcardinality = True)
-		minWeight = [(key,edgeMWDict[key]) for key in edgeMWDict.keys()]
+		minWeight = list(naa.max_weight_matching(H, maxcardinality = True))
 		uniqueMW = []
 		#Prune out redundant Tuples
 		for edge in minWeight:

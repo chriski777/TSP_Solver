@@ -12,9 +12,10 @@ class Graph_TSP:
 		self.instanceName = instanceName
 		self.solution = solution
 		for i in range(self.counts):
-			for j in range(i+1, self.counts):
-				vertices = (i,j)
-				self.edgeDict[vertices] = self.adjMatrix[i,j]
+			if self.counts > 1:
+				for j in range(i+1, self.counts):
+					vertices = (i,j)
+					self.edgeDict[vertices] = self.adjMatrix[i,j]
 		self.Bounds = bounds.Bounds(self.nodeDict, self.adjMatrix)
 		self.solutions = algorithms.Algorithms(self.nodeDict, self.adjMatrix,self.counts, self.edgeDict)
 	def HKLowerBoundCost(self):
